@@ -6,7 +6,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const wss = new WebSocketServer({ port: 8081 });
+const wss = new WebSocketServer({ port: 10000 });
 
 let connectedClients = [];
 
