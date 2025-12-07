@@ -1,32 +1,31 @@
 import express from "express";
-import cors from "cors";
 import { WebSocketServer } from "ws";
 
 const app = express();
-app.use(cors());
-app.use(express.json());
+const PORT = process.env.PORT || 10000;
 
-const wss = new WebSocketServer({ port: 10000 });
+app.get("/", (req, res) => {
+  res.send("WebSocket server running");
+});
 
-let connectedClients = [];
+const server = app.listen(PORT, () => {
+  console.log("Server running on port", PORT);
+});
 
-wss.on("connection", (ws) => {
-  connectedClients.push(ws);
+const wss = new WebSocketServer({ server });
 
-  ws.on("close", () => {
-    connectedClients = connectedClients.filter((c) => c !== ws);
+wss.on("connection", ws => {
+  console.log("Client connected");
+
+  ws.send(JSON.stringify({ info: "connected" }));
+
+  ws.on("message", msg => {
+    console.log("Message:", msg);
   });
 });
 
-app.post("/highlight", (req, res) => {
-  const { mesh } = req.body;
+export default app;
 
-  connectedClients.forEach((client) => {
-    client.send(JSON.stringify({ action: "highlight", mesh }));
-  });
-
-  res.json({ status: "ok", sent: mesh });
-});
 
 app.listen(3000, () => {
   console.log("API online su Render");
