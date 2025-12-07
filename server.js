@@ -11,7 +11,7 @@ app.use(express.json());
 const wss = new WebSocketServer({ server });
 
 wss.on("connection", (ws) => {
-    console.log("Babylon.js connected");
+    console.log("Three.js connected");
 });
 
 app.post("/sendCommand", (req, res) => {
@@ -24,7 +24,7 @@ app.post("/sendCommand", (req, res) => {
         }
     });
 
-    res.json({ status: "ok", message: "Command sent to Babylon.js" });
+    res.json({ status: "ok", message: "Command sent to Three.js" });
 });
 
 const PORT = process.env.PORT || 3000;
